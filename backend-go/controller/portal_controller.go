@@ -84,7 +84,7 @@ func (c *PortalController) UpdatePortal(ctx *gin.Context) {
         DefasagemNosDados   *bool   `json:"defasagemNosDados"`
         NovosDados          *bool   `json:"novosDados"`
     }
-    if err := ctx.ShouldBindJSON(&req); err != nil {
+    if bindErr := ctx.ShouldBindJSON(&req); bindErr != nil {
         ctx.JSON(http.StatusBadRequest, gin.H{"error": "Dados inválidos"})
         return
     }
@@ -112,7 +112,7 @@ func (c *PortalController) UpdatePortal(ctx *gin.Context) {
     }
 
     // Atualizar campos
-    if err := c.service.UpdatePortalFieldsMap(id, updates); err != nil {
+    if updateErr := c.service.UpdatePortalFieldsMap(id, updates); updateErr != nil {
         ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao atualizar portal"})
         return
     }

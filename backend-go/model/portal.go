@@ -3,6 +3,7 @@ package model
 type Portal struct {
 	ID                             string  `json:"_id" bson:"_id,omitempty"`
 	Referencia                     string  `json:"referencia"`
+	DataEntrega                    string  `json:"dataEntrega" bson:"dataEntrega,omitempty"`
 	Portal                         string  `json:"portal"`
 	Esfera                         string  `json:"esfera"`
 	MesAnoEnvio                    string  `json:"mesAnoEnvio"`

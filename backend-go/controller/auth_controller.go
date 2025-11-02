@@ -56,11 +56,11 @@ func (c *AuthController) RegisterRoutes(router *gin.RouterGroup) {
 
 // Register registra um novo usuário
 func (c *AuthController) Register(ctx *gin.Context) {
-	var req model.RegisterRequest
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Dados inválidos"})
-		return
-	}
+    var req model.RegisterRequest
+    if bindErr := ctx.ShouldBindJSON(&req); bindErr != nil {
+        ctx.JSON(http.StatusBadRequest, gin.H{"error": "Dados inválidos"})
+        return
+    }
 
 	// Validações básicas
 	if req.Nome == "" || req.Email == "" || req.Username == "" || req.Senha == "" {
@@ -95,13 +95,13 @@ func (c *AuthController) Register(ctx *gin.Context) {
 
 // Login autentica um usuário
 func (c *AuthController) Login(ctx *gin.Context) {
-	log.Println("Iniciando processo de login...")
-	var req model.LoginRequest
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		log.Printf("Erro ao fazer bind do JSON: %v", err)
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Dados inválidos"})
-		return
-	}
+    log.Println("Iniciando processo de login...")
+    var req model.LoginRequest
+    if bindErr := ctx.ShouldBindJSON(&req); bindErr != nil {
+        log.Printf("Erro ao fazer bind do JSON: %v", bindErr)
+        ctx.JSON(http.StatusBadRequest, gin.H{"error": "Dados inválidos"})
+        return
+    }
 	log.Printf("Requisição de login recebida para o usuário: %s", req.Username)
 
 	// Validações básicas
@@ -237,14 +237,14 @@ func (c *AuthController) GoogleCallback(ctx *gin.Context) {
 
 // ValidateToken valida um token de sessão
 func (c *AuthController) ValidateToken(ctx *gin.Context) {
-	var request struct {
-		Token string `json:"token"`
-	}
+    var request struct {
+        Token string `json:"token"`
+    }
 
-	if err := ctx.ShouldBindJSON(&request); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Dados inválidos"})
-		return
-	}
+    if bindErr := ctx.ShouldBindJSON(&request); bindErr != nil {
+        ctx.JSON(http.StatusBadRequest, gin.H{"error": "Dados inválidos"})
+        return
+    }
 
 	user, err := c.authService.ValidateSession(request.Token)
 	if err != nil {

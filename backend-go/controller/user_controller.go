@@ -105,22 +105,23 @@ func (c *UserController) ApproveUser(ctx *gin.Context) {
 		return
 	}
 
-	// Obter ID do usuário a ser aprovado
-	targetUserID, err := primitive.ObjectIDFromHex(ctx.Param("id"))
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "ID de usuário inválido"})
-		return
-	}
+    // Obter ID do usuário a ser aprovado
+    var targetUserID primitive.ObjectID
+    targetUserID, err = primitive.ObjectIDFromHex(ctx.Param("id"))
+    if err != nil {
+        ctx.JSON(http.StatusBadRequest, gin.H{"error": "ID de usuário inválido"})
+        return
+    }
 
 	// Obter dados da requisição
-	var req struct {
-		Aprovado bool `json:"aprovado"`
-	}
+    var req struct {
+        Aprovado bool `json:"aprovado"`
+    }
 
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Dados inválidos"})
-		return
-	}
+    if bindErr := ctx.ShouldBindJSON(&req); bindErr != nil {
+        ctx.JSON(http.StatusBadRequest, gin.H{"error": "Dados inválidos"})
+        return
+    }
 
 	// Atualizar status de aprovação
 	err = c.userService.UpdateUserApproval(targetUserID, req.Aprovado)
@@ -153,7 +154,8 @@ func (c *UserController) UpdateUserRole(ctx *gin.Context) {
     }
 
     // Obter ID e payload
-    targetUserID, err := primitive.ObjectIDFromHex(ctx.Param("id"))
+    var targetUserID primitive.ObjectID
+    targetUserID, err = primitive.ObjectIDFromHex(ctx.Param("id"))
     if err != nil {
         ctx.JSON(http.StatusBadRequest, gin.H{"error": "ID de usuário inválido"})
         return
@@ -162,14 +164,14 @@ func (c *UserController) UpdateUserRole(ctx *gin.Context) {
     var req struct {
         Role string `json:"role"`
     }
-    if err := ctx.ShouldBindJSON(&req); err != nil {
+    if bindErr := ctx.ShouldBindJSON(&req); bindErr != nil {
         ctx.JSON(http.StatusBadRequest, gin.H{"error": "Dados inválidos"})
         return
     }
 
     // Atualizar role via service
-    if err := c.userService.UpdateUserRole(targetUserID, req.Role); err != nil {
-        ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+    if updateErr := c.userService.UpdateUserRole(targetUserID, req.Role); updateErr != nil {
+        ctx.JSON(http.StatusBadRequest, gin.H{"error": updateErr.Error()})
         return
     }
 
