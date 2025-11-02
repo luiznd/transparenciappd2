@@ -37,7 +37,13 @@ jobs:
       - name: Go tests
         working-directory: backend-go
         run: |
-          go test ./... -v || true
+          go test ./... -v -coverprofile=coverage.out -covermode=atomic
+
+      - name: Upload Go coverage artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: go-coverage
+          path: backend-go/coverage.out
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -48,6 +54,11 @@ jobs:
         working-directory: frontend
         run: |
           npm ci
+
+      - name: Update Browserslist DB
+        working-directory: frontend
+        run: |
+          npx --yes update-browserslist-db@latest || true
 
       - name: Frontend build
         working-directory: frontend

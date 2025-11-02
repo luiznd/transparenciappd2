@@ -60,6 +60,7 @@ docker-compose.yml   # MongoDB e serviços auxiliares
 2. Execute:
    - `docker-compose up -d`
 3. Mongo estará acessível em `mongodb://root:admin@localhost:27018/portalDB?authSource=admin`.
+   Observação: o script `init_db.js` não é mais montado por padrão. A inicialização do banco ocorre dinamicamente pelo aplicativo. Se precisar criar um admin inicialmente, utilize o comando `mongosh` abaixo na seção “Scripts úteis”.
 
 ### Executar backend (Go)
 1. No Windows/PowerShell:
@@ -138,6 +139,12 @@ curl -X POST http://localhost:8081/api/auth/logout \
   -H "Authorization: Bearer SEU_TOKEN"
 ```
 
+### Papéis e fluxo Admin
+- Papéis suportados: `user` (padrão), `editor` e `admin`.
+- Usuários novos ficam com `aprovado=false`. Apenas administradores podem aprovar (`PUT /api/users/:id/approve`).
+- Apenas administradores podem listar todos os usuários e alterar papéis (`PUT /api/users/:id/role`).
+- `editor` é pensado para permissões de edição de portais; `user` possui acesso básico de leitura. O backend aplica o bloqueio de ações administrativas via middleware/controller.
+
 ## Endpoints principais (resumo)
 - `POST /api/auth/register` — cria usuário (sem token; aprovado=false; role=user).
 - `POST /api/auth/login` — autentica e cria sessão (token Bearer).
@@ -151,9 +158,24 @@ curl -X POST http://localhost:8081/api/auth/logout \
 - `PUT  /api/portals/:id` — atualizar campos editáveis.
 
 ## Scripts úteis
-- `init_db.js`: inicialização do banco quando usando Docker Compose (montado em `docker-entrypoint-initdb.d`).
+- `init_db.js` (opcional): script de inicialização do banco. Atualmente NÃO é montado pelo Docker Compose.
 - Para promover usuário a admin ou ajustar aprovação, use diretamente o mongosh:
   - `docker-compose exec mongo mongosh -u root -p admin --authenticationDatabase admin portalDB --eval 'db.users.updateOne({ username: "luiznd" }, { $set: { aprovado: true, role: "admin" } })'`
+
+## Coleções para teste (Postman/Insomnia)
+- Você pode importar a coleção Postman disponível em `docs/postman_collection.json`.
+- A coleção inclui endpoints de autenticação, usuário e portais. Ajuste as variáveis `baseUrl` e `token` conforme seu ambiente.
+
+## Makefile
+O projeto inclui um `Makefile` com alvos úteis:
+- `make backend-run` — roda o backend local.
+- `make backend-test` — executa testes com cobertura.
+- `make coverage` — mostra resumo da cobertura.
+- `make frontend-dev` — sobe o Vite na porta 3033.
+- `make frontend-build` — compila o frontend.
+- `make browserslist-update` — atualiza a base do Browserslist.
+- `make docker-up` / `make docker-down` — gerencia serviços via Docker Compose.
+- `make ci` — executa build/test backend e build frontend localmente.
 
 ## Desenvolvimento do frontend
 - O `AuthContext` centraliza autenticação e garante que `/api/users/me` e rotas protegidas sempre enviem `Authorization: Bearer <token>`.

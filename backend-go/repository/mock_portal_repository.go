@@ -208,7 +208,7 @@ func (r *mockPortalRepository) GetAllPortals() ([]model.Portal, error) {
 
 func (r *mockPortalRepository) GetPortalByID(id string) (model.Portal, error) {
     for _, p := range r.portals {
-        if p.ID == id || p.ID == id { // busca simples pelo campo ID
+        if p.ID == id { // busca simples pelo campo ID
             return p, nil
         }
     }

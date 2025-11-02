@@ -41,7 +41,6 @@ services:
       MONGO_INITDB_DATABASE: portalDB         # database inicial
     volumes:
       - mongo-data:/data/db
-      - ./init_db.js:/docker-entrypoint-initdb.d/init_db.js
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s

@@ -14,6 +14,7 @@ type UserService interface {
     GetAllUsers() ([]*model.User, error)
     UpdateUserApproval(id primitive.ObjectID, approved bool) error
     UpdateUserRole(id primitive.ObjectID, role string) error
+    LoginUser(loginReq *model.LoginRequest) (*model.LoginResponse, error)
 }
 
 type userService struct {

@@ -1,2 +1,3 @@
 // Re-export do AuthContext do diretório contexts para compatibilidade
-export { useAuth, AuthProvider } from '../contexts/AuthContext';
+export { AuthProvider } from '../contexts/AuthContext';
+export { useAuth } from '../hooks/useAuth';

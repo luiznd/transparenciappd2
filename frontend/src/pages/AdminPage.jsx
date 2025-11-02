@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 
 // Página Admin seguindo o mesmo padrão visual das demais (Layout via ProtectedRoute)
 const AdminPage = () => {
