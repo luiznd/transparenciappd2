@@ -59,14 +59,14 @@ docker-compose.yml   # MongoDB e serviços auxiliares
 1. Ajuste (se necessário) portas e credenciais em `docker-compose.yml`.
 2. Execute:
    - `docker-compose up -d`
-3. Mongo estará acessível em `mongodb://root:admin@localhost:27018/portalDB?authSource=admin`.
+3. Mongo estará acessível em `mongodb://user:pass@localhost:27018/portalDB?authSource=admin`.
    Observação: o script `init_db.js` não é mais montado por padrão. A inicialização do banco ocorre dinamicamente pelo aplicativo. Se precisar criar um admin inicialmente, utilize o comando `mongosh` abaixo na seção “Scripts úteis”.
 
 ### Executar backend (Go)
 1. No Windows/PowerShell:
    - `cd backend-go`
    - `go build .`
-   - `set MONGO_URI=mongodb://root:admin@localhost:27018/portalDB?authSource=admin&directConnection=true`
+   - `set MONGO_URI=mongodb://user:pass@localhost:27018/portalDB?authSource=admin&directConnection=true`
    - `go run main.go` ou `./backend-go.exe`
 2. O servidor inicia em `http://localhost:8081`.
 
@@ -96,7 +96,7 @@ Login tradicional:
 ```
 curl -X POST http://localhost:8081/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"username":"luiznd","senha":"admin123"}'
+  -d '{"username":"user","senha":"pass"}'
 ```
 
 Validar token e pegar usuário atual:
