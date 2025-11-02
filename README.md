@@ -73,7 +73,7 @@ docker-compose.yml   # MongoDB e serviços auxiliares
 1. `cd frontend`
 2. `npm install`
 3. `npm run dev -- --port 3033`
-4. Acesse `http://localhost:3034` (o Vite proxy aponta para o backend via `/api`).
+4. Acesse `http://localhost:3033` (o Vite proxy aponta para o backend via `/api`).
 
 ## Variáveis de ambiente
 - `MONGO_URI`: string de conexão do MongoDB.
@@ -88,6 +88,56 @@ docker-compose.yml   # MongoDB e serviços auxiliares
 - Middleware valida token e injeta `userID`.
 - Endpoints sob `/api/users` exigem autenticação; listagem e alterações (approve/role) exigem `role=admin`.
 
+### Exemplos de chamadas (curl)
+
+Login tradicional:
+
+```
+curl -X POST http://localhost:8081/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"luiznd","senha":"admin123"}'
+```
+
+Validar token e pegar usuário atual:
+
+```
+# Substitua SEU_TOKEN pelo token retornado no login
+curl -X GET http://localhost:8081/api/users/me \
+  -H "Authorization: Bearer SEU_TOKEN"
+```
+
+Listar usuários (admin):
+
+```
+curl -X GET http://localhost:8081/api/users \
+  -H "Authorization: Bearer SEU_TOKEN"
+```
+
+Aprovar usuário:
+
+```
+curl -X PUT http://localhost:8081/api/users/ID_DO_USUARIO/approve \
+  -H "Authorization: Bearer SEU_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"aprovado":true}'
+```
+
+Atualizar papel:
+
+```
+curl -X PUT http://localhost:8081/api/users/ID_DO_USUARIO/role \
+  -H "Authorization: Bearer SEU_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"role":"admin"}'
+```
+
+Logout:
+
+```
+curl -X POST http://localhost:8081/api/auth/logout \
+  -H "Authorization: Bearer SEU_TOKEN"
+```
+
 ## Endpoints principais (resumo)
 - `POST /api/auth/register` — cria usuário (sem token; aprovado=false; role=user).
 - `POST /api/auth/login` — autentica e cria sessão (token Bearer).
@@ -101,9 +151,8 @@ docker-compose.yml   # MongoDB e serviços auxiliares
 - `PUT  /api/portals/:id` — atualizar campos editáveis.
 
 ## Scripts úteis
-- `update_admin.js` / `create_admin.js` / `init_admin.js`: promovem/ajustam usuário admin.
-- `reset_password.js`, `set_admin_password.js`: utilitários de senha.
-- Exemplo via docker-compose:
+- `init_db.js`: inicialização do banco quando usando Docker Compose (montado em `docker-entrypoint-initdb.d`).
+- Para promover usuário a admin ou ajustar aprovação, use diretamente o mongosh:
   - `docker-compose exec mongo mongosh -u root -p admin --authenticationDatabase admin portalDB --eval 'db.users.updateOne({ username: "luiznd" }, { $set: { aprovado: true, role: "admin" } })'`
 
 ## Desenvolvimento do frontend
