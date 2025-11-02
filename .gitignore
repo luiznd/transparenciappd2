@@ -1,0 +1,30 @@
+# Node / Vite / React
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.vite/
+frontend/.cache/
+
+# Go
+backend-go/backend-go.exe
+backend-go/bin/
+backend-go/build/
+
+# OS / Editors
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Env / Secrets
+.env
+.env.*
+
+# Trae/Qodo internal
+.qodo/
+
+# Archives
+*.zip
+*.tar
+*.tar.gz

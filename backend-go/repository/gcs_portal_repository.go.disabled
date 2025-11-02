@@ -1,0 +1,182 @@
+package repository
+
+import (
+	"context"
+	"encoding/csv"
+	"fmt"
+	"io"
+	"log"
+	"strconv"
+	"strings"
+
+	"cloud.google.com/go/storage"
+	"solid_react_golang_mongo_project/backend-go/model"
+)
+
+type GCSPortalRepository struct {
+	client     *storage.Client
+	bucketName string
+	fileName   string
+}
+
+func NewGCSPortalRepository(bucketName, fileName string) (PortalRepository, error) {
+	ctx := context.Background()
+	client, err := storage.NewClient(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create GCS client: %v", err)
+	}
+
+	return &GCSPortalRepository{
+		client:     client,
+		bucketName: bucketName,
+		fileName:   fileName,
+	}, nil
+}
+
+func (r *GCSPortalRepository) InsertPortal(portal model.Portal) error {
+	// Para GCS, não implementamos inserção direta no CSV
+	// Esta funcionalidade poderia ser implementada lendo o arquivo, adicionando a linha e reescrevendo
+	return fmt.Errorf("insert operation not supported for GCS CSV repository")
+}
+
+func (r *GCSPortalRepository) GetAllPortals() ([]model.Portal, error) {
+	ctx := context.Background()
+
+	// Abrir o arquivo do bucket
+	bucket := r.client.Bucket(r.bucketName)
+	obj := bucket.Object(r.fileName)
+
+	reader, err := obj.NewReader(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read object from GCS: %v", err)
+	}
+	defer reader.Close()
+
+	// Ler o CSV
+	csvReader := csv.NewReader(reader)
+	csvReader.Comma = ';' // Usar ponto e vírgula como separador
+
+	// Ler todas as linhas
+	records, err := csvReader.ReadAll()
+	if err != nil {
+		return nil, fmt.Errorf("failed to read CSV: %v", err)
+	}
+
+	if len(records) == 0 {
+		return []model.Portal{}, nil
+	}
+
+	// Assumir que a primeira linha é o cabeçalho
+	header := records[0]
+	log.Printf("CSV Header: %v", header)
+
+	var portals []model.Portal
+	for i, record := range records[1:] { // Pular o cabeçalho
+		portal, err := r.parseCSVRecord(record, header)
+		if err != nil {
+			log.Printf("Error parsing record %d: %v", i+1, err)
+			continue // Pular registros com erro
+		}
+		portals = append(portals, portal)
+	}
+
+	return portals, nil
+}
+
+func (r *GCSPortalRepository) parseCSVRecord(record []string, header []string) (model.Portal, error) {
+	if len(record) != len(header) {
+		return model.Portal{}, fmt.Errorf("record length (%d) doesn't match header length (%d)", len(record), len(header))
+	}
+
+	// Criar um mapa para facilitar o acesso aos campos
+	fieldMap := make(map[string]string)
+	for i, field := range header {
+		fieldMap[strings.ToLower(strings.TrimSpace(field))] = strings.TrimSpace(record[i])
+	}
+
+	portal := model.Portal{}
+
+	// Mapear os campos do CSV para o struct Portal
+	// Ajustar os nomes dos campos conforme necessário baseado no CSV real
+	portal.Referencia = fieldMap["referencia"]
+	portal.Portal = fieldMap["portal"]
+	portal.Esfera = fieldMap["esfera"]
+	portal.MesAnoEnvio = fieldMap["mesanoenvio"]
+	portal.MesAnoReferencia = fieldMap["mesanoreferencia"]
+	portal.UltimoMesEnviado = fieldMap["ultimomesenviado"]
+	portal.UltimaReferencia = fieldMap["ultimareferencia"]
+	portal.MesCompetenciaMinimo = fieldMap["mescompetenciaminimo"]
+	portal.MesCompetenciaMaximo = fieldMap["mescompetenciamaximo"]
+	portal.Status = fieldMap["status"]
+	portal.ObservacaoTimeDados = fieldMap["observacaotimedados"]
+
+	// Converter campos numéricos
+	if val, err := strconv.Atoi(fieldMap["volumefonte"]); err == nil {
+		portal.VolumeFonte = val
+	}
+	if val, err := strconv.Atoi(fieldMap["volumetriadados"]); err == nil {
+		portal.VolumetriaDados = val
+	}
+	if val, err := strconv.Atoi(fieldMap["volumetriaservicos"]); err == nil {
+		portal.VolumetriaServicos = val
+	}
+	if val, err := strconv.Atoi(fieldMap["volumecpfsunicosdados"]); err == nil {
+		portal.VolumeCpfsUnicosDados = val
+	}
+	if val, err := strconv.Atoi(fieldMap["volumecpfsunicosservicos"]); err == nil {
+		portal.VolumeCpfsUnicosServicos = val
+	}
+	if val, err := strconv.Atoi(fieldMap["mediamovelcpfsunicos"]); err == nil {
+		portal.MediaMovelCpfsUnicos = val
+	}
+	if val, err := strconv.Atoi(fieldMap["ultimavolumetriaenviada"]); err == nil {
+		portal.UltimaVolumetriaEnviada = val
+	}
+	if val, err := strconv.Atoi(fieldMap["mediamovelultimos12meses"]); err == nil {
+		portal.MediaMovelUltimos12Meses = val
+	}
+	if val, err := strconv.Atoi(fieldMap["media"]); err == nil {
+		portal.Media = val
+	}
+	if val, err := strconv.Atoi(fieldMap["minimo"]); err == nil {
+		portal.Minimo = val
+	}
+	if val, err := strconv.Atoi(fieldMap["maximo"]); err == nil {
+		portal.Maximo = val
+	}
+
+	// Converter campos float
+	if val, err := strconv.ParseFloat(fieldMap["indicedados"], 64); err == nil {
+		portal.IndiceDados = val
+	}
+	if val, err := strconv.ParseFloat(fieldMap["indiceservicos"], 64); err == nil {
+		portal.IndiceServicos = val
+	}
+	if val, err := strconv.ParseFloat(fieldMap["percentualvolumetriaultima"], 64); err == nil {
+		portal.PercentualVolumetriaUltima = val
+	}
+	if val, err := strconv.ParseFloat(fieldMap["percentualvolumetriamediamovel"], 64); err == nil {
+		portal.PercentualVolumetriaMediaMovel = val
+	}
+	if val, err := strconv.ParseFloat(fieldMap["percentualvolumetriamedia"], 64); err == nil {
+		portal.PercentualVolumetriaMedia = val
+	}
+	if val, err := strconv.ParseFloat(fieldMap["percentualvolumetriaminimo"], 64); err == nil {
+		portal.PercentualVolumetriaMinimo = val
+	}
+	if val, err := strconv.ParseFloat(fieldMap["percentualvolumetriamaximo"], 64); err == nil {
+		portal.PercentualVolumetriaMaximo = val
+	}
+
+	// Converter campos boolean
+	portal.PulouCompetencia = strings.ToLower(fieldMap["puloucompetencia"]) == "true" || fieldMap["puloucompetencia"] == "1"
+	portal.DefasagemNosDados = strings.ToLower(fieldMap["defasagemnosdados"]) == "true" || fieldMap["defasagemnosdados"] == "1"
+	portal.NovosDados = strings.ToLower(fieldMap["novosdados"]) == "true" || fieldMap["novosdados"] == "1"
+	portal.Enviar = strings.ToLower(fieldMap["enviar"]) == "true" || fieldMap["enviar"] == "1"
+
+	return portal, nil
+}
+
+func (r *GCSPortalRepository) Close() error {
+	return r.client.Close()
+}
