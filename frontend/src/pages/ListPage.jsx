@@ -10,18 +10,14 @@ const ListPage = () => {
   const [loading, setLoading] = useState(false); // Estado de carregamento
   const [error, setError] = useState(null); // Estado de erro
   
-  // Padronização de rótulos e cores de status
+  // Exibir o status exatamente como na planilha; cor verde para "OK" e "Sem novos dados"
   const getStatusMeta = (status) => {
-    switch ((status || '').toUpperCase()) {
-      case 'OK':
-        return { label: 'OK', badgeClass: 'bg-green-100 text-green-800', rowBg: 'bg-green-50' };
-      case 'WARNING':
-        return { label: 'Aviso', badgeClass: 'bg-yellow-100 text-yellow-800', rowBg: 'bg-yellow-50' };
-      case 'ERROR':
-        return { label: 'Erro', badgeClass: 'bg-red-100 text-red-800', rowBg: 'bg-red-50' };
-      default:
-        return { label: status || 'Desconhecido', badgeClass: 'bg-gray-100 text-gray-800', rowBg: 'bg-gray-50' };
+    const raw = String(status || '').trim();
+    const sUpper = raw.toUpperCase();
+    if (sUpper === 'OK' || sUpper === 'SEM NOVOS DADOS') {
+      return { label: raw || 'OK', badgeClass: 'bg-green-100 text-green-800', rowBg: 'bg-green-50' };
     }
+    return { label: raw || '—', badgeClass: 'bg-red-100 text-red-800', rowBg: 'bg-red-50' };
   };
 
   // Definição de todas as colunas disponíveis com rótulos e renderização
@@ -98,10 +94,22 @@ const ListPage = () => {
     fetchApiData();
   }, []);
 
-  // Abas dinâmicas baseadas no campo 'referencia' dos dados
+  // Normalizar data de entrega para formato dd/MM/yyyy
+  const normalizeEntrega = (val) => {
+    const s = String(val || '').trim();
+    if (!s) return '';
+    let m = s.match(/^(\d{2})\/(\d{2})\/(\d{4})$/); // dd/MM/yyyy
+    if (m) return `${m[1]}/${m[2]}/${m[3]}`;
+    m = s.match(/^(\d{2})\/(\d{4})$/); // MM/yyyy -> usa dia 10
+    if (m) return `10/${m[1]}/${m[2]}`;
+    m = s.match(/^(\d{2})-(\d{2})-(\d{4})$/); // dd-MM-yyyy -> converte para /
+    if (m) return `${m[1]}/${m[2]}/${m[3]}`;
+    return s;
+  };
+  const getEntregaForPortal = (p) => normalizeEntrega(p.dataEntrega || p.referencia);
+  // Abas dinâmicas baseadas em data de entrega normalizada
   const abaNames = React.useMemo(() => {
-    const refs = Array.from(new Set((portals || []).map(p => p.referencia).filter(Boolean)));
-    // Ordenar decrescente por string (mantém formato dd-mm-aaaa)
+    const refs = Array.from(new Set((portals || []).map(p => getEntregaForPortal(p)).filter(Boolean)));
     refs.sort((a, b) => b.localeCompare(a));
     return refs;
   }, [portals]);
@@ -111,6 +119,53 @@ const ListPage = () => {
       setSelectedAba(abaNames[0]);
     }
   }, [abaNames, selectedAba]);
+
+  // Filtro por Mês/Ano Referência (opções derivadas da aba selecionada)
+  const [referenciaFilter, setReferenciaFilter] = useState(''); // '' => todas
+  // Barra de pesquisa por nome do portal (com persistência simples)
+  const [portalSearch, setPortalSearch] = useState(() => {
+    try { return localStorage.getItem('list_portal_search') || ''; } catch { return ''; }
+  });
+  useEffect(() => {
+    try { localStorage.setItem('list_portal_search', portalSearch); } catch {}
+  }, [portalSearch]);
+  // Normalização para busca case/acentos-insensitive
+  const normalizeStr = (s) => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const referenciaOptions = React.useMemo(() => {
+    const base = (portals || []).filter(p => getEntregaForPortal(p) === selectedAba);
+    const arr = Array.from(new Set(base.map(p => String(p.mesAnoReferencia || '').trim()).filter(Boolean)));
+    arr.sort((a, b) => b.localeCompare(a));
+    return arr;
+  }, [portals, selectedAba]);
+
+  // Contagens por data de entrega (aba selecionada)
+  const filteredPortals = (portals || [])
+    .filter(portal => getEntregaForPortal(portal) === selectedAba)
+    .filter(portal => {
+      if (!referenciaFilter) return true;
+      const v = String(portal.mesAnoReferencia || '').trim().toUpperCase();
+      return v === referenciaFilter.toUpperCase();
+    })
+    .filter(portal => {
+      const q = portalSearch && portalSearch.trim();
+      if (!q) return true;
+      const needle = normalizeStr(q);
+      const hay = normalizeStr(portal.portal || '');
+      return hay.includes(needle);
+    });
+  const countSemNovosDadosAba = React.useMemo(() => {
+    return filteredPortals.filter(p => String(p.mesAnoReferencia || '').trim().toUpperCase() === 'SEM NOVOS DADOS').length;
+  }, [filteredPortals]);
+  const totalAEnviar = React.useMemo(() => {
+    // Total por data de entrega excluindo "Sem novos dados"
+    return filteredPortals.filter(p => String(p.mesAnoReferencia || '').trim().toUpperCase() !== 'SEM NOVOS DADOS').length;
+  }, [filteredPortals]);
+  const totalAEnviarUnicos = React.useMemo(() => {
+    // Contar nomes de portais únicos (case-insensitive), excluindo "Sem novos dados"
+    const relevantes = filteredPortals.filter(p => String(p.mesAnoReferencia || '').trim().toUpperCase() !== 'SEM NOVOS DADOS');
+    const nomes = new Set(relevantes.map(p => String(p.portal || '').trim().toUpperCase()));
+    return nomes.size;
+  }, [filteredPortals]);
 
   // Configurações de edição, paginação e modal
   const [itemsPerPage, setItemsPerPage] = useState(() => {
@@ -129,7 +184,7 @@ const ListPage = () => {
   const [modalMessage, setModalMessage] = useState('');
 
   // Filtrar registros da aba selecionada (consumo exclusivo da API)
-  const filteredPortals = (portals || []).filter(portal => portal.referencia === selectedAba);
+  // Já calculado acima com dataEntrega || referencia
   
   // Ordenação configurável (com persistência)
   const [sortKey, setSortKey] = useState(() => {
@@ -194,6 +249,8 @@ const ListPage = () => {
     setSelectedAba(event.target.value);
     setCurrentPage(1); // Resetar para a primeira página ao trocar de aba
   };
+  // Resetar paginação ao mudar busca
+  useEffect(() => { setCurrentPage(1); }, [portalSearch]);
   // Ordenar ao clicar no cabeçalho
   const handleSortByKey = (key) => {
     if (sortKey === key) {
@@ -251,7 +308,20 @@ const ListPage = () => {
           return p[c.key] != null ? p[c.key] : '';
       }
     };
-    const filtered = (portals || []).filter(portal => portal.referencia === selectedAba);
+    const filtered = (portals || [])
+      .filter(portal => getEntregaForPortal(portal) === selectedAba)
+      .filter(portal => {
+        if (!referenciaFilter) return true;
+        const v = String(portal.mesAnoReferencia || '').trim().toUpperCase();
+        return v === referenciaFilter.toUpperCase();
+      })
+      .filter(portal => {
+        const q = portalSearch && portalSearch.trim();
+        if (!q) return true;
+        const needle = normalizeStr(q);
+        const hay = normalizeStr(portal.portal || '');
+        return hay.includes(needle);
+      });
     const rows = filtered.map(p => cols.map(c => getCSVValue(c, p)));
     const csv = [headers.map(escapeCSV).join(';'), ...rows.map(r => r.map(escapeCSV).join(';'))].join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -313,6 +383,32 @@ const ListPage = () => {
                 </svg>
               </span>
             </div>
+            {/* Filtro por Mês/Ano Referência */}
+            <label htmlFor="referenciaFilter" className="text-sm font-medium text-gray-700 ml-3">Mês/Ano Referência:</label>
+            <div className="relative inline-block">
+              <select
+                id="referenciaFilter"
+                value={referenciaFilter}
+                onChange={(e) => { setReferenciaFilter(e.target.value); setCurrentPage(1); }}
+                className="appearance-none rounded-md border-gray-300 bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-primary px-2.5 pr-7 py-1 text-sm"
+                aria-label="Filtrar por Mês/Ano Referência"
+              >
+                <option value="">Todas</option>
+                {referenciaOptions.map((ref) => (
+                  <option key={ref} value={ref}>{ref}</option>
+                ))}
+              </select>
+              <span className="pointer-events-none absolute inset-y-0 right-2 flex items-center">
+                <svg className="h-4 w-4 text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.27a.75.75 0 01-.02-1.06z" clipRule="evenodd" />
+                </svg>
+              </span>
+            </div>
+            {/* Totais por data de entrega (aba selecionada) */}
+            <div className="flex items-center gap-2 ml-4">
+              <span className="px-2 py-1 rounded bg-primary/10 text-primary text-xs md:text-sm">Total de Portais a Enviar: <strong>{totalAEnviarUnicos}</strong></span>
+              <span className="px-2 py-1 rounded bg-green-100 text-green-800 text-xs md:text-sm">Sem novos dados (data): <strong>{countSemNovosDadosAba}</strong></span>
+            </div>
           </div>
 
           {/* Ações principais */}
@@ -334,6 +430,7 @@ const ListPage = () => {
                   onChange={(e) => { setCurrentPage(1); setItemsPerPage(parseInt(e.target.value, 10)); }}
                   className="appearance-none rounded-md border-gray-300 bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-secondary px-2.5 pr-7 py-1 text-sm"
                 >
+                  <option value={5}>5</option>
                   <option value={10}>10</option>
                   <option value={25}>25</option>
                   <option value={50}>50</option>
@@ -345,6 +442,27 @@ const ListPage = () => {
                   </svg>
                 </span>
               </div>
+            </div>
+            {/* Busca por nome do portal */}
+            <div className="flex items-center gap-2">
+              <label htmlFor="portalSearch" className="text-sm text-gray-700">Buscar portal:</label>
+              <input
+                id="portalSearch"
+                type="text"
+                value={portalSearch}
+                onChange={(e) => setPortalSearch(e.target.value)}
+                placeholder="Pesquisar por nome do portal"
+                className="rounded-md border border-gray-300 bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-secondary px-2 py-1 text-sm"
+              />
+              {portalSearch && (
+                <button
+                  onClick={() => { setPortalSearch(''); setCurrentPage(1); }}
+                  className="px-2.5 py-1 rounded-md bg-gray-100 hover:bg-gray-200 text-sm border border-gray-300"
+                  title="Limpar busca"
+                >
+                  Limpar
+                </button>
+              )}
             </div>
             <div className="flex items-center gap-2">
               <label htmlFor="sortKey" className="text-sm text-gray-700">Ordenar por:</label>
@@ -432,24 +550,23 @@ const ListPage = () => {
         </div>
       )}
 
-      {/* Legenda de Status com estilo de chips */}
+      {/* Legenda de Status simplificada */}
       <div className="w-full mb-2">
         <div className="text-sm font-medium text-gray-700 mb-1">Legenda de Status</div>
         <div className="flex items-center flex-wrap gap-2">
           <span className="px-3 py-1 inline-flex items-center text-xs font-semibold rounded-full bg-green-50 text-green-700 border border-green-200">OK — Dados consistentes</span>
-          <span className="px-3 py-1 inline-flex items-center text-xs font-semibold rounded-full bg-yellow-50 text-yellow-700 border border-yellow-200">Aviso — Atenção</span>
-          <span className="px-3 py-1 inline-flex items-center text-xs font-semibold rounded-full bg-red-50 text-red-700 border border-red-200">Erro — Problema crítico</span>
+          <span className="px-3 py-1 inline-flex items-center text-xs font-semibold rounded-full bg-red-50 text-red-700 border border-red-200">Observação—Dados fora do padrão</span>
         </div>
       </div>
 
-      <div className="w-full bg-white shadow-lg rounded-xl overflow-x-auto">
+      <div className="w-full bg-white shadow-lg rounded-xl overflow-x-auto scroll-area">
         <table className="table-auto w-full border-collapse text-xs md:text-sm lg:text-base">
           <caption className="sr-only">Listagem de Portais e indicadores</caption>
           <thead>
-            {/* Linha do título centralizado */}
+            {/* Linha do título centralizado (totais por data de entrega) */}
             <tr className="bg-primary/15 text-primary text-left">
               <th colSpan={Math.max(selectedCols.length, 1)} className="p-4 text-2xl font-semibold">
-                Total de Portais a Enviar: {totalPortais}
+                Total de Portais a Enviar: {totalAEnviarUnicos}
               </th>
             </tr>
             <tr className="bg-primary text-white">

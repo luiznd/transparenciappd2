@@ -18,7 +18,7 @@ const Layout = ({ children }) => {
       {/* Skip link para acessibilidade */}
       <a href="#conteudo" className="sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:p-2 focus:bg-white focus:text-black focus:rounded focus:shadow" aria-label="Pular para o conteúdo principal">Pular para conteúdo</a>
       <header className="sticky top-0 z-30 w-full bg-gradient-to-r from-primary to-accent text-white shadow-md">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             {/* Marca "Portais Transparência" */}
             <div className="flex items-center gap-3">
@@ -76,7 +76,7 @@ const Layout = ({ children }) => {
         {/* Painel mobile */}
         {isAuthenticated && mobileOpen && (
           <div id="mobileMenu" className="md:hidden border-t border-white/20 bg-gradient-to-r from-primary to-accent">
-            <div className="mx-auto max-w-7xl px-4 py-2 flex items-center gap-4 text-white">
+            <div className="mx-auto max-w-screen-2xl px-4 py-2 flex items-center gap-4 text-white">
               <Link to="/list" className="inline-flex items-center gap-1.5 text-sm hover:opacity-90" onClick={() => setMobileOpen(false)}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4"><path d="M4 6.75A2.75 2.75 0 0 1 6.75 4h10.5A2.75 2.75 0 0 1 20 6.75v10.5A2.75 2.75 0 0 1 17.25 20H6.75A2.75 2.75 0 0 1 4 17.25V6.75Zm2.75-.25a.25.25 0 0 0-.25.25v10.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25V6.75a.25.25 0 0 0-.25-.25H6.75Z"/></svg>
                 Lista
@@ -90,11 +90,11 @@ const Layout = ({ children }) => {
         )}
       </header>
 
-      <main id="conteudo" className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-6 flex-1">
+      <main id="conteudo" className="mx-auto max-w-screen-2xl w-full px-4 sm:px-6 lg:px-8 py-6 flex-1">
         {children}
       </main>
       <footer className="border-t bg-white/90">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 text-xs sm:text-sm text-gray-600">
+        <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-4 text-xs sm:text-sm text-gray-600">
           <div className="flex justify-between">
             <span>© {new Date().getFullYear()} Transparência</span>
             <span className="hidden sm:inline">Feito com React + Vite</span>

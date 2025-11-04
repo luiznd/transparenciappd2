@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Estilo visual do scroll para áreas de listagem (compatível com WebKit e Firefox) */
+.scroll-area {
+  scrollbar-width: thin;            /* Firefox */
+  scrollbar-color: #9ca3af #f3f4f6; /* polegar e trilho */
+}
+.scroll-area::-webkit-scrollbar {
+  height: 10px; /* scroll horizontal */
+  width: 10px;  /* scroll vertical */
+}
+.scroll-area::-webkit-scrollbar-track {
+  background: #f3f4f6; /* gray-100 */
+  border-radius: 8px;
+}
+.scroll-area::-webkit-scrollbar-thumb {
+  background-color: #9ca3af; /* gray-400 */
+  border-radius: 8px;
+  border: 2px solid #f3f4f6; /* cria espaçamento visual */
+}
+.scroll-area:hover::-webkit-scrollbar-thumb {
+  background-color: #6b7280; /* gray-500 ao hover */
+}

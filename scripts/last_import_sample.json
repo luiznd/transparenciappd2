@@ -1,0 +1,529 @@
+{
+  "file": "E:\\Neoway\\ENTREGA ITAÚ - RELATÓRIO BOTS [SD e PPD2] (13).xlsx",
+  "headerRow": 2,
+  "sheets": [
+    {
+      "sheet": "Entrega 10112025",
+      "sampleCount": 5,
+      "uniqueIdCount": 116,
+      "totalDocs": 116,
+      "samples": [
+        {
+          "_id": "1df7af085d81cd10167b8f3920f58d13b7750fc3",
+          "dataEntrega": "11/2025",
+          "referencia": "11/2025",
+          "portal": "transparencia_go",
+          "mesAnoReferencia": "4/2025",
+          "mesAnoEnvio": "11/2025",
+          "esfera": "ESTADUAL",
+          "status": "DIVERGÊNCIA MÉDIA MÓVEL VOLUMETRIA; DIVERGÊNCIA MÉDIA VOLUMETRIA; DIVERGÊNCIA COM ÚLTIMA VOLUMETRIA"
+        },
+        {
+          "_id": "7dd28390a4b62e57c8b4fa09ef8694c9b99a8c56",
+          "dataEntrega": "11/2025",
+          "referencia": "11/2025",
+          "portal": "transparencia_go",
+          "mesAnoReferencia": "5/2025",
+          "mesAnoEnvio": "11/2025",
+          "esfera": "ESTADUAL",
+          "status": "DIVERGÊNCIA MÉDIA MÓVEL VOLUMETRIA; DIVERGÊNCIA MÉDIA VOLUMETRIA; DIVERGÊNCIA COM ÚLTIMA VOLUMETRIA"
+        },
+        {
+          "_id": "c856869cb80d2f0fdba38d6f2ff6dc869020b40f",
+          "dataEntrega": "11/2025",
+          "referencia": "11/2025",
+          "portal": "transparencia_go",
+          "mesAnoReferencia": "6/2025",
+          "mesAnoEnvio": "11/2025",
+          "esfera": "ESTADUAL",
+          "status": "DIVERGÊNCIA MÉDIA MÓVEL VOLUMETRIA; DIVERGÊNCIA MÉDIA VOLUMETRIA; DIVERGÊNCIA COM ÚLTIMA VOLUMETRIA; DEFASAGEM DE DADOS SUPERIOR A 90 DIAS"
+        },
+        {
+          "_id": "90f62a2734535fbbb91bbdca0fc2220273ad6869",
+          "dataEntrega": "11/2025",
+          "referencia": "11/2025",
+          "portal": "transparencia_go",
+          "mesAnoReferencia": "7/2025",
+          "mesAnoEnvio": "11/2025",
+          "esfera": "ESTADUAL",
+          "status": "DIVERGÊNCIA MÉDIA MÓVEL VOLUMETRIA; DIVERGÊNCIA MÉDIA VOLUMETRIA; DIVERGÊNCIA COM ÚLTIMA VOLUMETRIA; DEFASAGEM DE DADOS SUPERIOR A 90 DIAS"
+        },
+        {
+          "_id": "278c9eaa5f086f1fbfc9565ed69938a9e4fbb1ce",
+          "dataEntrega": "11/2025",
+          "referencia": "11/2025",
+          "portal": "transparencia_go",
+          "mesAnoReferencia": "8/2025",
+          "mesAnoEnvio": "11/2025",
+          "esfera": "ESTADUAL",
+          "status": "DIVERGÊNCIA MÉDIA MÓVEL VOLUMETRIA; DIVERGÊNCIA MÉDIA VOLUMETRIA; DIVERGÊNCIA COM ÚLTIMA VOLUMETRIA; DEFASAGEM DE DADOS SUPERIOR A 90 DIAS"
+        }
+      ]
+    },
+    {
+      "sheet": "Entrega 10102025",
+      "sampleCount": 5,
+      "uniqueIdCount": 149,
+      "totalDocs": 149,
+      "samples": [
+        {
+          "_id": "ba0739d8d1ea91183168fd340aa8e9cc163e28b0",
+          "dataEntrega": "10/2025",
+          "referencia": "10/2025",
+          "portal": "transparencia_ac",
+          "mesAnoReferencia": "8/2025",
+          "mesAnoEnvio": "10/2025",
+          "esfera": "ESTADUAL",
+          "status": "OK"
+        },
+        {
+          "_id": "2c9950357422d282a811f7b8272bc228a250ff9e",
+          "dataEntrega": "10/2025",
+          "referencia": "10/2025",
+          "portal": "transparencia_al",
+          "mesAnoReferencia": "8/2025",
+          "mesAnoEnvio": "10/2025",
+          "esfera": "ESTADUAL",
+          "status": "DIVERGÊNCIA MÉDIA MÓVEL VOLUMETRIA; DIVERGÊNCIA COM ÚLTIMA VOLUMETRIA"
+        },
+        {
+          "_id": "df2864eaa13691c79a117f79238b6c538730ad8a",
+          "dataEntrega": "10/2025",
+          "referencia": "10/2025",
+          "portal": "transparencia_am",
+          "mesAnoReferencia": "8/2025",
+          "mesAnoEnvio": "10/2025",
+          "esfera": "ESTADUAL",
+          "status": "OK"
+        },
+        {
+          "_id": "bdfdef02388827a029786e97c20f86f48cf563ad",
+          "dataEntrega": "10/2025",
+          "referencia": "10/2025",
+          "portal": "transparencia_ap",
+          "mesAnoReferencia": "8/2025",
+          "mesAnoEnvio": "10/2025",
+          "esfera": "ESTADUAL",
+          "status": "OK"
+        },
+        {
+          "_id": "ea2a46130d897a106738b86f620b4a588f1ac3ac",
+          "dataEntrega": "10/2025",
+          "referencia": "10/2025",
+          "portal": "transparencia_ce",
+          "mesAnoReferencia": "8/2025",
+          "mesAnoEnvio": "10/2025",
+          "esfera": "ESTADUAL",
+          "status": "OK"
+        }
+      ]
+    },
+    {
+      "sheet": "Entrega 10092025",
+      "sampleCount": 5,
+      "uniqueIdCount": 138,
+      "totalDocs": 138,
+      "samples": [
+        {
+          "_id": "44a6c443173e98c484db1533d112e27c16ee65e8",
+          "dataEntrega": "09/2025",
+          "referencia": "09/2025",
+          "portal": "transparencia_ac",
+          "mesAnoReferencia": "7/2025",
+          "mesAnoEnvio": "09/2025",
+          "esfera": "ESTADUAL",
+          "status": "OK"
+        },
+        {
+          "_id": "e8bec40f68658c160c0053cb22110506d633fbcc",
+          "dataEntrega": "09/2025",
+          "referencia": "09/2025",
+          "portal": "transparencia_al",
+          "mesAnoReferencia": "7/2025",
+          "mesAnoEnvio": "09/2025",
+          "esfera": "ESTADUAL",
+          "status": "OK"
+        },
+        {
+          "_id": "b0a42b1ae4969f14613df3a28d2dd07dcc1c5ed7",
+          "dataEntrega": "09/2025",
+          "referencia": "09/2025",
+          "portal": "transparencia_am",
+          "mesAnoReferencia": "7/2025",
+          "mesAnoEnvio": "09/2025",
+          "esfera": "ESTADUAL",
+          "status": "OK"
+        },
+        {
+          "_id": "4b3020e837e6621670657c4a70c7ac1d2d980201",
+          "dataEntrega": "09/2025",
+          "referencia": "09/2025",
+          "portal": "transparencia_ap",
+          "mesAnoReferencia": "6/2025",
+          "mesAnoEnvio": "09/2025",
+          "esfera": "ESTADUAL",
+          "status": "OK"
+        },
+        {
+          "_id": "d5afa8fc7e9866eadf3c20b71913ae07e7ebd313",
+          "dataEntrega": "09/2025",
+          "referencia": "09/2025",
+          "portal": "transparencia_ap",
+          "mesAnoReferencia": "7/2025",
+          "mesAnoEnvio": "09/2025",
+          "esfera": "ESTADUAL",
+          "status": "OK"
+        }
+      ]
+    },
+    {
+      "sheet": "Entrega 10082025",
+      "sampleCount": 5,
+      "uniqueIdCount": 124,
+      "totalDocs": 124,
+      "samples": [
+        {
+          "_id": "7c3640790741a2667f4a3cb24954131a09b19772",
+          "dataEntrega": "08/2025",
+          "referencia": "08/2025",
+          "portal": "transparencia_ac",
+          "mesAnoReferencia": "6/2025",
+          "mesAnoEnvio": "08/2025",
+          "esfera": "ESTADUAL",
+          "status": "OK"
+        },
+        {
+          "_id": "d2aba1de0646692fc70a3ceb740d1e24c3f8cd0f",
+          "dataEntrega": "08/2025",
+          "referencia": "08/2025",
+          "portal": "transparencia_al",
+          "mesAnoReferencia": "6/2025",
+          "mesAnoEnvio": "08/2025",
+          "esfera": "ESTADUAL",
+          "status": "OK"
+        },
+        {
+          "_id": "65f72a219a66408d7c6a226d0c5cde9fd680cf7c",
+          "dataEntrega": "08/2025",
+          "referencia": "08/2025",
+          "portal": "transparencia_am",
+          "mesAnoReferencia": "6/2025",
+          "mesAnoEnvio": "08/2025",
+          "esfera": "ESTADUAL",
+          "status": "OK"
+        },
+        {
+          "_id": "b26a6381aa7a110b559dc8e55e730361d444f464",
+          "dataEntrega": "08/2025",
+          "referencia": "08/2025",
+          "portal": "transparencia_ap",
+          "mesAnoReferencia": "6/2025",
+          "mesAnoEnvio": "08/2025",
+          "esfera": "ESTADUAL",
+          "status": "DIVERGÊNCIA MÉDIA MÓVEL VOLUMETRIA; DIVERGÊNCIA COM ÚLTIMA VOLUMETRIA"
+        },
+        {
+          "_id": "c7209351642fbe4fc94a2dd9112ca9ff15f0cfb5",
+          "dataEntrega": "08/2025",
+          "referencia": "08/2025",
+          "portal": "transparencia_ce",
+          "mesAnoReferencia": "6/2025",
+          "mesAnoEnvio": "08/2025",
+          "esfera": "ESTADUAL",
+          "status": "OK"
+        }
+      ]
+    },
+    {
+      "sheet": "Entrega 10072025",
+      "sampleCount": 5,
+      "uniqueIdCount": 133,
+      "totalDocs": 133,
+      "samples": [
+        {
+          "_id": "56ee0b258f5842884174ee194ed2a39caffe4fa1",
+          "dataEntrega": "07/2025",
+          "referencia": "07/2025",
+          "portal": "transparencia_ac",
+          "mesAnoReferencia": "5/2025",
+          "mesAnoEnvio": "07/2025",
+          "esfera": "ESTADUAL",
+          "status": "OK"
+        },
+        {
+          "_id": "234ed15200ac88c061305fc41a35dc5e487ad5b0",
+          "dataEntrega": "07/2025",
+          "referencia": "07/2025",
+          "portal": "transparencia_al",
+          "mesAnoReferencia": "4/2025",
+          "mesAnoEnvio": "07/2025",
+          "esfera": "ESTADUAL",
+          "status": "OK"
+        },
+        {
+          "_id": "61cebcd102ac2429794b78beb5cbb649cb02027c",
+          "dataEntrega": "07/2025",
+          "referencia": "07/2025",
+          "portal": "transparencia_al",
+          "mesAnoReferencia": "5/2025",
+          "mesAnoEnvio": "07/2025",
+          "esfera": "ESTADUAL",
+          "status": "OK"
+        },
+        {
+          "_id": "86d982840434c94eb168c2dd8cf5b60e7f3e973b",
+          "dataEntrega": "07/2025",
+          "referencia": "07/2025",
+          "portal": "transparencia_am",
+          "mesAnoReferencia": "5/2025",
+          "mesAnoEnvio": "07/2025",
+          "esfera": "ESTADUAL",
+          "status": "OK"
+        },
+        {
+          "_id": "931158dba7352bad913579fff71c2b464efbe89e",
+          "dataEntrega": "07/2025",
+          "referencia": "07/2025",
+          "portal": "transparencia_ap",
+          "mesAnoReferencia": "5/2025",
+          "mesAnoEnvio": "07/2025",
+          "esfera": "ESTADUAL",
+          "status": "DIVERGÊNCIA MÉDIA MÓVEL VOLUMETRIA; DIVERGÊNCIA COM ÚLTIMA VOLUMETRIA"
+        }
+      ]
+    },
+    {
+      "sheet": "Entrega 10062025",
+      "sampleCount": 5,
+      "uniqueIdCount": 146,
+      "totalDocs": 146,
+      "samples": [
+        {
+          "_id": "3cff4ef5c7367535a5e12cff87fefcdf42c40e74",
+          "dataEntrega": "06/2025",
+          "referencia": "06/2025",
+          "portal": "transparencia_ac",
+          "mesAnoReferencia": "Sem novos dados",
+          "mesAnoEnvio": "06/2025",
+          "esfera": "ESTADUAL",
+          "status": "OK"
+        },
+        {
+          "_id": "ad2747b64976cd8a9f458a78896d5f3e16d1e5b7",
+          "dataEntrega": "06/2025",
+          "referencia": "06/2025",
+          "portal": "transparencia_al",
+          "mesAnoReferencia": "Sem novos dados",
+          "mesAnoEnvio": "06/2025",
+          "esfera": "ESTADUAL",
+          "status": "OK"
+        },
+        {
+          "_id": "a995083900ca17b9797471f721f0a4192f672883",
+          "dataEntrega": "06/2025",
+          "referencia": "06/2025",
+          "portal": "transparencia_am",
+          "mesAnoReferencia": "4/2025",
+          "mesAnoEnvio": "06/2025",
+          "esfera": "ESTADUAL",
+          "status": "OK"
+        },
+        {
+          "_id": "0a2b159a0d7b997d64724c7b9cdae3de4692ac78",
+          "dataEntrega": "06/2025",
+          "referencia": "06/2025",
+          "portal": "transparencia_ap",
+          "mesAnoReferencia": "4/2025",
+          "mesAnoEnvio": "06/2025",
+          "esfera": "ESTADUAL",
+          "status": "DIVERGÊNCIA MÉDIA MÓVEL VOLUMETRIA; DIVERGÊNCIA COM ÚLTIMA VOLUMETRIA"
+        },
+        {
+          "_id": "5452ec7261a62d42a5191e459b988574797e234a",
+          "dataEntrega": "06/2025",
+          "referencia": "06/2025",
+          "portal": "transparencia_ce",
+          "mesAnoReferencia": "4/2025",
+          "mesAnoEnvio": "06/2025",
+          "esfera": "ESTADUAL",
+          "status": "OK"
+        }
+      ]
+    },
+    {
+      "sheet": "Entrega 10112024 - teste 5",
+      "sampleCount": 5,
+      "uniqueIdCount": 142,
+      "totalDocs": 142,
+      "samples": [
+        {
+          "_id": "331329842af22ef8fe368fbd493e70fad9d934dd",
+          "dataEntrega": "11/2024",
+          "referencia": "11/2024",
+          "portal": "transparencia_al",
+          "mesAnoReferencia": "",
+          "mesAnoEnvio": "11/2024",
+          "esfera": "ESTADUAL",
+          "status": "OK"
+        },
+        {
+          "_id": "a8319ca41dab83db1e1163c1492a50d9276b928c",
+          "dataEntrega": "11/2024",
+          "referencia": "11/2024",
+          "portal": "transparencia_am",
+          "mesAnoReferencia": "",
+          "mesAnoEnvio": "11/2024",
+          "esfera": "ESTADUAL",
+          "status": "ÍNDICE DE AGREGAÇÃO ABAIXO DE 80%"
+        },
+        {
+          "_id": "ddc8b1f1f3564d8b3c571c37d1d042b7750c2933",
+          "dataEntrega": "11/2024",
+          "referencia": "11/2024",
+          "portal": "transparencia_df",
+          "mesAnoReferencia": "",
+          "mesAnoEnvio": "11/2024",
+          "esfera": "ESTADUAL",
+          "status": "DIVERGÊNCIA MÉDIA MÓVEL VOLUMETRIA; DIVERGÊNCIA COM ÚLTIMA VOLUMETRIA; ÍNDICE DE AGREGAÇÃO ABAIXO DE 80%"
+        },
+        {
+          "_id": "1530ed18351cb4019a48487b721456d94db07118",
+          "dataEntrega": "11/2024",
+          "referencia": "11/2024",
+          "portal": "transparencia_df",
+          "mesAnoReferencia": "",
+          "mesAnoEnvio": "11/2024",
+          "esfera": "ESTADUAL",
+          "status": "DIVERGÊNCIA MÉDIA MÓVEL VOLUMETRIA"
+        },
+        {
+          "_id": "1bd49c313bf7ce3a7fbaf5414128670e0d196c67",
+          "dataEntrega": "11/2024",
+          "referencia": "11/2024",
+          "portal": "transparencia_es",
+          "mesAnoReferencia": "",
+          "mesAnoEnvio": "11/2024",
+          "esfera": "ESTADUAL",
+          "status": "DIVERGÊNCIA COM ÚLTIMA VOLUMETRIA; PULOU COMPETÊNCIA; DEFASAGEM DE DADOS SUPERIOR A 90 DIAS"
+        }
+      ]
+    },
+    {
+      "sheet": "Entrega 10032024 - RPS-17816 Se",
+      "sampleCount": 5,
+      "uniqueIdCount": 171,
+      "totalDocs": 171,
+      "samples": [
+        {
+          "_id": "9c02bb584fe61f1cb9f76789e6f78ff744c2848d",
+          "dataEntrega": "10/03/2024",
+          "referencia": "10/03/2024",
+          "portal": "transparencia_al",
+          "mesAnoReferencia": "",
+          "mesAnoEnvio": "",
+          "esfera": "",
+          "status": "OK"
+        },
+        {
+          "_id": "89acf70da78434e837c2fad89e1c3f4ff95838bd",
+          "dataEntrega": "10/03/2024",
+          "referencia": "10/03/2024",
+          "portal": "transparencia_ap",
+          "mesAnoReferencia": "",
+          "mesAnoEnvio": "",
+          "esfera": "",
+          "status": "DIVERGÊNCIA VOLUMETRIA"
+        },
+        {
+          "_id": "b8d1855ebd92f391a70b74441b0b8355b223029c",
+          "dataEntrega": "10/03/2024",
+          "referencia": "10/03/2024",
+          "portal": "transparencia_df",
+          "mesAnoReferencia": "",
+          "mesAnoEnvio": "",
+          "esfera": "",
+          "status": "DIVERGÊNCIA VOLUMETRIA"
+        },
+        {
+          "_id": "4a287ed99b5da38fa494252f3af2bb551c084e44",
+          "dataEntrega": "10/03/2024",
+          "referencia": "10/03/2024",
+          "portal": "transparencia_df",
+          "mesAnoReferencia": "",
+          "mesAnoEnvio": "",
+          "esfera": "",
+          "status": "OK"
+        },
+        {
+          "_id": "3ae40ddb02c44db6def987e7d89e808cd71b3478",
+          "dataEntrega": "10/03/2024",
+          "referencia": "10/03/2024",
+          "portal": "transparencia_ms",
+          "mesAnoReferencia": "",
+          "mesAnoEnvio": "",
+          "esfera": "",
+          "status": "OK"
+        }
+      ]
+    },
+    {
+      "sheet": "Entrega 10022024 - RPS-17358 se",
+      "sampleCount": 5,
+      "uniqueIdCount": 120,
+      "totalDocs": 120,
+      "samples": [
+        {
+          "_id": "0201231e0250825813b24f2b65ba7360be96dd30",
+          "dataEntrega": "10/02/2024",
+          "referencia": "10/02/2024",
+          "portal": "transparencia_ac",
+          "mesAnoReferencia": "",
+          "mesAnoEnvio": "",
+          "esfera": "",
+          "status": "OK"
+        },
+        {
+          "_id": "7065c316435f72f0d1ceac094c8e2777e33a115c",
+          "dataEntrega": "10/02/2024",
+          "referencia": "10/02/2024",
+          "portal": "transparencia_ac",
+          "mesAnoReferencia": "",
+          "mesAnoEnvio": "",
+          "esfera": "",
+          "status": "OK"
+        },
+        {
+          "_id": "6e4e29c23b903457fb74de56cdd03dbc231d715a",
+          "dataEntrega": "10/02/2024",
+          "referencia": "10/02/2024",
+          "portal": "transparencia_ac",
+          "mesAnoReferencia": "",
+          "mesAnoEnvio": "",
+          "esfera": "",
+          "status": "OK"
+        },
+        {
+          "_id": "b740eba963fa7073dea5fc30c025ad694535f82c",
+          "dataEntrega": "10/02/2024",
+          "referencia": "10/02/2024",
+          "portal": "transparencia_al",
+          "mesAnoReferencia": "",
+          "mesAnoEnvio": "",
+          "esfera": "",
+          "status": "OK"
+        },
+        {
+          "_id": "2e1e807fe5e2a25f936f8d06d84ff24ab6bbb10a",
+          "dataEntrega": "10/02/2024",
+          "referencia": "10/02/2024",
+          "portal": "transparencia_al",
+          "mesAnoReferencia": "",
+          "mesAnoEnvio": "",
+          "esfera": "",
+          "status": "OK"
+        }
+      ]
+    }
+  ],
+  "generatedAt": "2025-11-02T22:29:28.430Z"
+}

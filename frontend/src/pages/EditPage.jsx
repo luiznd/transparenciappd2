@@ -1,7 +1,7 @@
 // src/pages/EditPage.js
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Pie, Bar } from 'react-chartjs-2';
+import { Pie, Bar, Radar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import axios from 'axios';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -13,10 +13,7 @@ const EditPage = () => {
   const [portalData, setPortalData] = useState(null);
   const [observacaoTimeDados, setObservacaoTimeDados] = useState('');
   const [enviar, setEnviar] = useState(false);
-  const [status, setStatus] = useState('');
-  const [pulouCompetencia, setPulouCompetencia] = useState(false);
-  const [defasagemNosDados, setDefasagemNosDados] = useState(false);
-  const [novosDados, setNovosDados] = useState(false);
+  // Campos editáveis foram restritos: apenas observacaoTimeDados e enviar
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [saving, setSaving] = useState(false);
@@ -33,10 +30,7 @@ const EditPage = () => {
         setPortalData(response.data);
         setObservacaoTimeDados(response.data.observacaoTimeDados || '');
         setEnviar(!!response.data.enviar);
-        setStatus(response.data.status || '');
-        setPulouCompetencia(!!response.data.pulouCompetencia);
-        setDefasagemNosDados(!!response.data.defasagemNosDados);
-        setNovosDados(!!response.data.novosDados);
+        // Demais campos permanecem somente leitura na UI
       } catch (err) {
         setError('Erro ao carregar dados do portal: ' + err.message);
         console.error('Erro ao buscar portal por ID:', err);
@@ -48,6 +42,23 @@ const EditPage = () => {
   }, [id]);
 
   // Dados dos gráficos
+  const safePct = (num, den) => {
+    const n = Number(num) || 0;
+    const d = Number(den) || 0;
+    if (d <= 0) return 0;
+    const pct = (n / d) * 100;
+    // Limitar a 100 para melhor leitura em gráficos de Radar
+    return Math.min(Math.max(pct, 0), 100);
+  };
+
+  const percentMetrics = portalData ? {
+    taxaDadosVsFonte: safePct(portalData.volumetriaDados, portalData.volumeFonte),
+    taxaServicosVsFonte: safePct(portalData.volumetriaServicos, portalData.volumeFonte),
+    cpfsUnicosDadosSobreVolumetriaDados: safePct(portalData.volumeCpfsUnicosDados, portalData.volumetriaDados),
+    cpfsUnicosServicosSobreVolumetriaServicos: safePct(portalData.volumeCpfsUnicosServicos, portalData.volumetriaServicos),
+    ultimaVolumetriaSobreMediaMovel: safePct(portalData.ultimaVolumetriaEnviada, portalData.mediaMovelUltimos12Meses),
+  } : null;
+
   const pieData = portalData ? {
     labels: ['Volume Fonte', 'Volumetria Serviços', 'Última Volumetria Enviada', 'Média Móvel (Últimos 12 Meses)'],
     datasets: [
@@ -91,6 +102,56 @@ const EditPage = () => {
           '#10B981',
           '#3B82F6',
           '#6366F1'
+        ]
+      }
+    ]
+  } : { labels: [], datasets: [] };
+
+  const radarLabels = [
+    'Taxa Dados vs Fonte',
+    'Taxa Serviços vs Fonte',
+    'CPFs Únicos Dados / Vol. Dados',
+    'CPFs Únicos Serviços / Vol. Serviços',
+    'Última Volumetria / Média Móvel',
+  ];
+
+  const radarData = percentMetrics ? {
+    labels: radarLabels,
+    datasets: [
+      {
+        label: 'Percentuais (%)',
+        data: [
+          percentMetrics.taxaDadosVsFonte,
+          percentMetrics.taxaServicosVsFonte,
+          percentMetrics.cpfsUnicosDadosSobreVolumetriaDados,
+          percentMetrics.cpfsUnicosServicosSobreVolumetriaServicos,
+          percentMetrics.ultimaVolumetriaSobreMediaMovel,
+        ],
+        backgroundColor: 'rgba(99, 102, 241, 0.2)',
+        borderColor: '#6366F1',
+        pointBackgroundColor: '#6366F1',
+      }
+    ]
+  } : { labels: [], datasets: [] };
+
+  const percentBarData = percentMetrics ? {
+    labels: radarLabels,
+    datasets: [
+      {
+        label: 'Percentuais (%)',
+        data: [
+          percentMetrics.taxaDadosVsFonte,
+          percentMetrics.taxaServicosVsFonte,
+          percentMetrics.cpfsUnicosDadosSobreVolumetriaDados,
+          percentMetrics.cpfsUnicosServicosSobreVolumetriaServicos,
+          percentMetrics.ultimaVolumetriaSobreMediaMovel,
+        ],
+        backgroundColor: [
+          '#10B981',
+          '#3B82F6',
+          '#F59E0B',
+          '#8B5CF6',
+          '#EF4444',
         ]
       }
     ]
@@ -152,7 +213,8 @@ const EditPage = () => {
         <div className="flex flex-col w-full md:w-1/2 gap-6">
           {/* Card de Edição de Campos */}
           <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h3 className="text-xl font-bold mb-4 text-gray-700">Editar Dados</h3>
+            <h3 className="text-xl font-bold mb-1 text-gray-700">Editar Dados</h3>
+            <p className="text-sm text-gray-500 mb-4">Somente os campos "Observação Time Dados" e "Enviar?" podem ser alterados.</p>
             <div className="mb-4">
               <label className="block font-semibold text-gray-700">Observação Time Dados</label>
               <textarea
@@ -171,46 +233,7 @@ const EditPage = () => {
                 className="mt-2"
               />
             </div>
-            <div className="mb-4">
-              <label className="block font-semibold text-gray-700">Status</label>
-              <select
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-                className="w-full p-2 border rounded"
-              >
-                <option value="">Selecione...</option>
-                <option value="OK">OK</option>
-                <option value="WARNING">WARNING</option>
-                <option value="ERROR">ERROR</option>
-              </select>
-            </div>
-            <div className="mb-2">
-              <label className="block font-semibold text-gray-700">Pulou Competência?</label>
-              <input
-                type="checkbox"
-                checked={pulouCompetencia}
-                onChange={(e) => setPulouCompetencia(e.target.checked)}
-                className="mt-2"
-              />
-            </div>
-            <div className="mb-2">
-              <label className="block font-semibold text-gray-700">Defasagem nos Dados?</label>
-              <input
-                type="checkbox"
-                checked={defasagemNosDados}
-                onChange={(e) => setDefasagemNosDados(e.target.checked)}
-                className="mt-2"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block font-semibold text-gray-700">Novos Dados?</label>
-              <input
-                type="checkbox"
-                checked={novosDados}
-                onChange={(e) => setNovosDados(e.target.checked)}
-                className="mt-2"
-              />
-            </div>
+            {/* Campos somente leitura foram removidos da edição para atender à regra */}
             <button
               onClick={async () => {
                 setSaving(true);
@@ -220,14 +243,10 @@ const EditPage = () => {
                   await axios.put(`/api/portals/${id}`, {
                     observacaoTimeDados,
                     enviar,
-                    status,
-                    pulouCompetencia,
-                    defasagemNosDados,
-                    novosDados,
                   });
                   setSaveSuccess('Alterações salvas com sucesso.');
                   // Atualizar dados exibidos
-                  setPortalData({ ...portalData, observacaoTimeDados, enviar, status, pulouCompetencia, defasagemNosDados, novosDados });
+                  setPortalData({ ...portalData, observacaoTimeDados, enviar });
                 } catch (err) {
                   console.error('Erro ao salvar dados:', err);
                   const msg = err.response?.data?.error || 'Erro ao salvar alterações';
@@ -273,6 +292,65 @@ const EditPage = () => {
             <h3 className="text-xl font-bold mb-4 text-gray-700 text-center">Detalhamento de Volumes</h3>
             <div className="flex-grow flex items-center justify-center">
               <Bar data={barData} options={{ indexAxis: 'y' }} />
+            </div>
+          </div>
+
+          {/* Novo: Radar de Percentuais de Volumetria */}
+          <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col min-w-full h-[350px]">
+            <h3 className="text-xl font-bold mb-2 text-gray-700 text-center">Radar de Percentuais (0-100%)</h3>
+            <p className="text-xs text-gray-500 text-center mb-3">
+              Métricas calculadas: Dados/Fonte, Serviços/Fonte, CPFs Únicos/Volumetria (Dados e Serviços), Última Volumetria/Média Móvel.
+            </p>
+            <div className="flex-grow flex items-center justify-center">
+              <Radar 
+                data={radarData} 
+                options={{
+                  maintainAspectRatio: false,
+                  scales: {
+                    r: {
+                      suggestedMin: 0,
+                      suggestedMax: 100,
+                      ticks: {
+                        callback: (val) => `${val}%`,
+                        showLabelBackdrop: false,
+                      },
+                      grid: { color: 'rgba(156, 163, 175, 0.2)' },
+                      angleLines: { color: 'rgba(156, 163, 175, 0.2)' },
+                    }
+                  },
+                  plugins: {
+                    legend: { display: true },
+                  }
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Novo: Barra dos Percentuais */}
+          <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col min-w-full h-[350px]">
+            <h3 className="text-xl font-bold mb-2 text-gray-700 text-center">Percentuais de Volumetria</h3>
+            <div className="flex-grow flex items-center justify-center">
+              <Bar 
+                data={percentBarData} 
+                options={{
+                  maintainAspectRatio: false,
+                  scales: {
+                    y: { beginAtZero: true, max: 100, ticks: { callback: (val) => `${val}%` } }
+                  },
+                  plugins: {
+                    datalabels: {
+                      formatter: (value) => `${Number(value).toFixed(0)}%`,
+                      color: '#111827',
+                      anchor: 'end',
+                      align: 'start',
+                      offset: -2,
+                      font: { weight: 'bold' },
+                    },
+                    legend: { display: false },
+                  },
+                }}
+                plugins={[ChartDataLabels]}
+              />
             </div>
           </div>
         </div>
